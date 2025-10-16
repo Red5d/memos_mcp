@@ -217,7 +217,7 @@ async def update_memo(
             return f"Error: visibility must be one of {', '.join(valid_visibilities)}"
     
     # Build update payload and update mask
-    memo_data = {}
+    memo_data = {"state": "STATE_UNSPECIFIED"}
     update_paths = []
     
     if content is not None:
@@ -238,15 +238,9 @@ async def update_memo(
     # Build the full payload
     memo_name = f"memos/{memo_uid}"
     payload = {
-        "memo": {
-            "name": memo_name,
-            **memo_data
-        },
-        "updateMask": {
-            "paths": update_paths
-        }
+        **memo_data
     }
-    
+
     try:
         async with httpx.AsyncClient() as client:
             response = await client.patch(
